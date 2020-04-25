@@ -27,15 +27,6 @@ export default class App extends Component {
       }
     };
 
-    countDoneItems = () => {
-        const doneItems = this.state.todoData.filter( item => item.done );
-        return doneItems.length;
-    };
-
-    countTodoItems = () => {
-        return this.state.todoData.length - this.countDoneItems();
-    };
-
     deleteItem = (id) => {
         this.setState( ( { todoData } ) => {
             const newArray = todoData.filter( listItem => listItem.id !== id );
@@ -89,9 +80,13 @@ export default class App extends Component {
 
     render() {
 
+        const { todoData } = this.state;
+        const doneItems = todoData.filter( item => item.done ).length;
+        const todoItems = todoData.length - doneItems;
+
         return (
             <div className="todo-app">
-                <AppHeader toDo={ this.countTodoItems() } done={ this.countDoneItems() }/>
+                <AppHeader toDo={ todoItems } done={ doneItems }/>
                 <div className="top-panel d-flex">
                     <SearchPanel/>
                     <ItemStatusFilter/>
