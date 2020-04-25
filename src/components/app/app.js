@@ -18,6 +18,15 @@ export default class App extends Component {
         ]
     };
 
+    countDoneItems = () => {
+        const doneItems = this.state.todoData.filter( item => item.done );
+        return doneItems.length;
+    };
+
+    countTodoItems = () => {
+        return this.state.todoData.length - this.countDoneItems();
+    };
+
     deleteItem = (id) => {
         this.setState( ( { todoData } ) => {
             const newArray = todoData.filter( listItem => listItem.id !== id );
@@ -77,7 +86,7 @@ export default class App extends Component {
 
         return (
             <div className="todo-app">
-                <AppHeader toDo={1} done={3}/>
+                <AppHeader toDo={ this.countTodoItems() } done={ this.countDoneItems() }/>
                 <div className="top-panel d-flex">
                     <SearchPanel/>
                     <ItemStatusFilter/>
