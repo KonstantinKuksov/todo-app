@@ -8,14 +8,23 @@ import './app.css';
 
 export default class App extends Component {
 
-    maxId = 100;
+    maxId = 1;
 
     state = {
         todoData: [
-            { label: 'Drink Coffee', important: false, id: 1, done: false },
-            { label: 'Make Awesome App', important: false, id: 2, done: false },
-            { label: 'Have a lunch', important: false, id: 3, done: false }
+            this.createTodoItem('Drink Coffee'),
+            this.createTodoItem('Make Awesome App'),
+            this.createTodoItem('Have a lunch')
         ]
+    };
+
+    createTodoItem(label) {
+      return {
+          label,
+          important: false,
+          done: false,
+          id: this.maxId++
+      }
     };
 
     countDoneItems = () => {
@@ -37,11 +46,7 @@ export default class App extends Component {
     };
 
     addItem = (text) => {
-        const newItem = {
-            label: text,
-            important: false,
-            id: this.maxId++
-        };
+        const newItem = this.createTodoItem(text);
 
         this.setState( ({ todoData }) => {
             return {
