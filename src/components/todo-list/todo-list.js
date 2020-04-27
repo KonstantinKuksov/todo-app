@@ -2,10 +2,10 @@ import React from "react";
 import TodoListItem from "./../todo-list-item";
 import './todo-list.css';
 
-const TodoList = ({ todos, onDeleted, onToggleImportant, onToggleDone }) => {
+const TodoList = ({ todos, onDeleted, onToggleImportant, onToggleDone, onSearch }) => {
 
-    const elements = todos.map((item) => {
-
+    const elements = todos.filter( (item) => onSearch(item.label) )
+        .map((item) => {
         const { id, ...itemProps } = item;
 
         return (
