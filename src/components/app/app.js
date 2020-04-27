@@ -13,10 +13,11 @@ export default class App extends Component {
     state = {
         todoData: [
             this.createTodoItem('Drink Coffee'),
-            this.createTodoItem('Make Awesome App'),
+            this.createTodoItem('Learn React'),
             this.createTodoItem('Have a lunch')
         ],
-        searchingText: ''
+        searchingText: '',
+        filter: 'all'  //  all, active, done
     };
 
     createTodoItem(label) {
@@ -85,11 +86,31 @@ export default class App extends Component {
         return label.toLowerCase().includes(this.state.searchingText.toLowerCase());
     };
 
+    filter(items, filter) {
+
+        switch (filter) {
+            case 'all':
+                return items;
+            case 'active':
+                return items.filter( (item) => !item.done );
+            case 'done':
+                return items.filter( (item) => item.done );
+            default:
+                return items;
+        }
+
+    }
+
+    onFilterChange = (filter) => {
+        this.setState({ filter })
+    };
+
     render() {
 
-        const { todoData } = this.state;
+        const { todoData, filter } = this.state;
         const doneItems = todoData.filter( item => item.done ).length;
         const todoItems = todoData.length - doneItems;
+        const visibleItems = this.filter( todoData, filter );
 
         return (
             <div className="todo-app">
@@ -97,10 +118,10 @@ export default class App extends Component {
                 <div className="top-panel d-flex">
                     <SearchPanel setSearchingText={this.setSearchingText}
                                  searchingText={this.state.searchingText}/>
-                    <ItemStatusFilter/>
+                    <ItemStatusFilter filter={ filter } onFilterChange={this.onFilterChange}/>
                 </div>
 
-                <TodoList todos={this.state.todoData}
+                <TodoList todos={visibleItems}
                           onDeleted={(id) => {
                               this.deleteItem(id)
                           }}
